@@ -31,7 +31,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-/app/api
+/app/api/llama3/.env
+/app/api/openrouter
 
 # typescript
 *.tsbuildinfo
@@ -39,3 +40,5 @@ next-env.d.ts
 
 .vercel
 
+
+.vercel

@@ -30,37 +30,47 @@ import {
 import { Nunito } from "next/font/google";
 const nunito = Nunito({ subsets: ["latin"], weight: ["400", "700"] });
 
-import { getGroqChatCompletion } from "../api/llama3/route.mjs";
-
-async function handler(req, res) {
-  if (req.method === "POST") {
-    try {
-      const { items } = req.body;
-      const response = await getGroqChatCompletion(items);
-      res.status(200).json(response.choices[0]?.message?.content || {});
-    } catch (error) {
-      res.status(500).json({ error: "Error fetching recipes" });
-    }
-  } else {
-    res.setHeader("Allow", ["POST"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
-}
-
 export default function Home() {
   const router = useRouter();
   const [inventory, setInventory] = useState([]);
+  const [ingredient, setIngredient] = useState([]);
+  const [recipes, setRecipes] = useState("");
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
     const docs = await getDocs(snapshot);
     const inventoryList = [];
+    const ingredList = [];
     docs.forEach((doc) => {
       inventoryList.push({
         name: doc.id,
         ...doc.data(),
       });
+      ingredList.push(doc.id);
     });
     setInventory(inventoryList);
+    setIngredient(ingredList);
+  };
+
+  const getRecipes = async () => {
+    try {
+      const response = await fetch("../api/getRecipes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ingredients: ingredient }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setRecipes(data);
+        console.log("Recipes:", data);
+      } else {
+        console.error("Error fetching recipes");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
 
   return (
@@ -172,6 +182,10 @@ export default function Home() {
                 className={nunito.className}
                 fontSize="200%"
                 textTransform={"capitalize"}
+                onClick={() => {
+                  updateInventory();
+                  getRecipes();
+                }}
               >
                 Generate
               </Typography>
@@ -187,35 +201,7 @@ export default function Home() {
           overflow="auto"
           alignItems="center"
           gap={2}
-        >
-          {recipes &&
-            Object.keys(recipes).map((dish) => (
-              <Box
-                key={dish}
-                width="90%"
-                minHeight="150px"
-                display="flex"
-                flexDirection="column"
-                borderRadius="30px"
-                bgcolor="#f0f0f0"
-                padding={5}
-              >
-                <Typography
-                  className={nunito.className}
-                  variant="h3"
-                  color="#333"
-                  textTransform="capitalize"
-                >
-                  {dish}
-                </Typography>
-                <ul>
-                  {recipes[dish].map((step, index) => (
-                    <li key={index}>{step}</li>
-                  ))}
-                </ul>
-              </Box>
-            ))}
-        </Stack>
+        ></Stack>
       </Box>
     </Box>
   );
