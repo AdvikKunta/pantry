@@ -222,24 +222,6 @@ export default function Home() {
         >
           <Camera ref={camera} aspectRatio={4 / 3} />
           <Box display="flex" flexDirection="row" gap={2}>
-            {/* <Button
-              variant="outlined"
-              sx={{
-                textTransform: "none",
-                color: "#E3752B",
-                border: "1px solid",
-                borderColor: "#E3752B",
-                "&:hover": {
-                  borderRadius: "20px",
-                  backgroundColor: "#E3342B",
-                  color: "white",
-                  borderColor: "#E3342B",
-                },
-              }}
-              onClick={() => startCamera(videoRef)}
-            >
-              <PlayArrow></PlayArrow>
-            </Button> */}
             <Button
               variant="outlined"
               sx={{
@@ -258,24 +240,6 @@ export default function Home() {
             >
               <AddAPhoto></AddAPhoto>
             </Button>
-            {/* <Button
-              variant="outlined"
-              sx={{
-                textTransform: "none",
-                color: "#E3752B",
-                border: "1px solid",
-                borderColor: "#E3752B",
-                "&:hover": {
-                  borderRadius: "20px",
-                  backgroundColor: "#E3342B",
-                  color: "white",
-                  borderColor: "#E3342B",
-                },
-              }}
-              onClick={() => stopCamera(videoRef)}
-            >
-              <Stop></Stop>
-            </Button> */}
           </Box>
         </Box>
       </Modal>
@@ -285,7 +249,6 @@ export default function Home() {
         flexDirection="column"
         gap={2}
         alignItems="center"
-        // justifyContent="center"
         width="20%"
         height="100%"
       >
