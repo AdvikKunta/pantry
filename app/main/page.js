@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { firestore } from "@/firebase";
+import { firestore } from "../../firebase";
 import {
   Box,
   Button,
@@ -29,7 +29,8 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { Nunito } from "next/font/google";
-import { startCamera, takePicture, stopCamera } from "./camera";
+
+import { Camera } from "react-camera-pro";
 
 const nunito = Nunito({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -44,8 +45,7 @@ export default function Home() {
   const handleOpenCam = () => setOpenCam(true);
   const handleCloseCam = () => setOpenCam(false);
 
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
+  const camera = useRef(null);
   const [image, setImage] = useState(null);
 
   const exportData = async () => {
@@ -207,6 +207,7 @@ export default function Home() {
             transform: "translate(-50%, -50%)",
           }}
           width={500}
+          height={500}
           bgcolor="white"
           borderRadius="30px"
           border="2px solid #E3AC2B"
@@ -217,28 +218,11 @@ export default function Home() {
           justifyContent="center"
           alignItems="center"
           gap={3}
+          overflow="hidden"
         >
-          <video
-            ref={videoRef}
-            width={400}
-            height={300}
-            autoPlay
-            playsInline
-            style={{
-              borderRadius: "30px",
-              overflow: "hidden",
-            }}
-          />
-          <canvas
-            ref={canvasRef}
-            style={{
-              display: "none",
-              borderRadius: "30px",
-              overflow: "hidden",
-            }}
-          />
+          <Camera ref={camera} aspectRatio={4 / 3} />
           <Box display="flex" flexDirection="row" gap={2}>
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{
                 textTransform: "none",
@@ -255,7 +239,7 @@ export default function Home() {
               onClick={() => startCamera(videoRef)}
             >
               <PlayArrow></PlayArrow>
-            </Button>
+            </Button> */}
             <Button
               variant="outlined"
               sx={{
@@ -270,11 +254,11 @@ export default function Home() {
                   borderColor: "#E3342B",
                 },
               }}
-              onClick={() => takePicture(videoRef, canvasRef, setImage)}
+              onClick={() => setImage(camera.current.takePhoto())}
             >
               <AddAPhoto></AddAPhoto>
             </Button>
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{
                 textTransform: "none",
@@ -291,7 +275,7 @@ export default function Home() {
               onClick={() => stopCamera(videoRef)}
             >
               <Stop></Stop>
-            </Button>
+            </Button> */}
           </Box>
         </Box>
       </Modal>

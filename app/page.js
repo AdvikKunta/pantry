@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { firestore } from "@/firebase";
+import { firestore } from "../firebase";
 import {
   Box,
   Button,

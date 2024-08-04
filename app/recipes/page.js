@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { firestore } from "@/firebase";
+import { firestore } from "../../firebase";
 import {
   Box,
   Button,
