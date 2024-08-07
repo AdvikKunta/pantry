@@ -48,11 +48,6 @@ export default function Home() {
   const camera = useRef(null);
   const [image, setImage] = useState(null);
 
-  const exportData = async () => {
-    const snapshot = query(collection(firestore, "inventory"));
-    const docs = await getDocs(snapshot);
-  };
-
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
     const docs = await getDocs(snapshot);
